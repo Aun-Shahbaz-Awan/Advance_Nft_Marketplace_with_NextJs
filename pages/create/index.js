@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import router from "next/router";
 import Image from "next/dist/client/image";
-import Head from "next/head";
 import { ethers } from "ethers";
-import Web3Modal from "web3Modal";
+import Web3Modal from "web3modal";
 // Addresses
 import { NFTAddress, MarketAddress } from "../../config";
 // ABI's
