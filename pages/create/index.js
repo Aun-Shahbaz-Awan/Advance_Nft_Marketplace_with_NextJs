@@ -6,8 +6,8 @@ import Web3Modal from "web3modal";
 // Addresses
 import { NFTAddress, MarketAddress } from "../../config";
 // ABI's
-import NFT from "../../artifacts/contracts/NFT.sol/NFT.json";
-import Market from "../../artifacts/contracts/NFTMarket.sol/NFTMarket.json";
+import NFT from "./../../artifacts/contracts/NFT.sol/NFT.json";
+import Market from "./../../artifacts/contracts/NFTMarket.sol/NFTMarket.json";
 // Moralis
 import { useMoralis } from "react-moralis";
 

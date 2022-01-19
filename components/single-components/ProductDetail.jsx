@@ -19,7 +19,7 @@ import { SiEthereum } from "react-icons/si";
 // Components
 import ListingTable from "./ProductTableList";
 import { MarketAddress } from "../../config";
-import Market from "../../artifacts/contracts/NFTMarket.sol/NFTMarket.json";
+import Market from "./../../artifacts/contracts/NFTMarket.sol/NFTMarket.json";
 
 const ProductDetail = () => {
   // Fetching Slug(Url)

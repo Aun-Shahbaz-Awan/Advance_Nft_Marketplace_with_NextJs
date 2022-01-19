@@ -6,8 +6,8 @@ import Web3Modal from "web3modal";
 // Contracts Address
 import { NFTAddress, MarketAddress } from "../../config";
 // Contarcts ABI's
-import Market from "../../artifacts/contracts/NFTMarket.sol/NFTMarket.json";
-import NFT from "../../artifacts/contracts/NFT.sol/NFT.json";
+import Market from "./../../artifacts/contracts/NFTMarket.sol/NFTMarket.json";
+import NFT from "./../../artifacts/contracts/NFT.sol/NFT.json";
 // Component
 import Product from "../../components/single-components/Product";
 import ProductLoadAnim from "../../components/single-components/ProductLoadAnim";
