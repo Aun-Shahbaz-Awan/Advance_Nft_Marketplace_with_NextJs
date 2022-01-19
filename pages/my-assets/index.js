@@ -20,20 +20,12 @@ export default function MyAssets() {
   }, []);
   // Fetch my Tokens
   async function loadNFTs() {
-    // const web3Modal = new Web3Modal({
-    //   // network: "mainnet",
-    //   // cacheProvider: true,
-    // });
+    // const web3Modal = new Web3Modal();
     // const connection = await web3Modal.connect();
     // const provider = new ethers.providers.Web3Provider(connection);
-    // const provider = await detectEthereumProvider();
-    // const signer = provider.getSigner();
-
     const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
     const signer = provider.getSigner();
-    // const connection = window.ethereum ? window.ethereum : "";
-    // const provider = new ethers.providers.Web3Provider(connection);
-    // const signer = provider.getSigner();
+    
     const user = await signer.getAddress().then((result) => {
       return result;
     });

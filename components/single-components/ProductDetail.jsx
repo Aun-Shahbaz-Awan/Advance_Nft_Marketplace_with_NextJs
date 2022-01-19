@@ -57,7 +57,7 @@ const ProductDetail = () => {
     console.log("price:", price);
     // const web3Modal = new Web3Modal();
     // const connection = await web3Modal.connect();
-    // const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+    // const provider = new ethers.providers.Web3Provider(connection);
     const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
     const signer = provider.getSigner();
 

@@ -69,7 +69,7 @@ export default function Home() {
   const handleBuyNft = async (nft) => {
     // const web3Modal = new Web3Modal();
     // const connection = await web3Modal.connect();
-    // const provider = await detectEthereumProvider();
+    // const provider = new ethers.providers.Web3Provider(connection);
     const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
     const signer = provider.getSigner();
     const contract = new ethers.Contract(MarketAddress, Market.abi, signer);

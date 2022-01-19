@@ -31,10 +31,7 @@ const ProductSell = () => {
     event.preventDefault();
     // const web3Modal = new Web3Modal();
     // const connection = await web3Modal.connect();
-    // const provider = new ethers.providers.JsonRpcProvider(
-    //   `https://rinkeby.infura.io/v3/${process.env.RPC_Provider_Id}`
-    // );
-    // console.log(provider);
+    // const provider = new ethers.providers.Web3Provider(connection);
     const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
     const signer = provider.getSigner();
     // const signer = provider.getSigner();
