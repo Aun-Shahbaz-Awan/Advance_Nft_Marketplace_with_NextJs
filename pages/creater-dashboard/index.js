@@ -2,6 +2,7 @@ import { ethers } from "ethers";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Web3Modal from "web3modal";
+
 // Contracts Address
 import { NFTAddress, MarketAddress } from "../../config";
 // Contarcts ABI's

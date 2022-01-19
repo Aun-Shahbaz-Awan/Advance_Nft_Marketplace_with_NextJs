@@ -10,7 +10,7 @@ import { RiArrowUpSFill } from "react-icons/ri";
 import { MdArrowBackIos } from "react-icons/md";
 // Blockchian
 import { ethers } from "ethers";
-import Web3Modal from "web3Modal";
+import Web3Modal from "web3modal";
 import { MarketAddress } from "../../config";
 // Contract ABI
 import Market from "../../artifacts/contracts/NFTMarket.sol/NFTMarket.json";

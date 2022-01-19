@@ -21,7 +21,6 @@ const Create = () => {
   const [minting, setMinting] = useState(false);
   // Moralis
   const { authenticate, user, Moralis } = useMoralis();
-
   // Upload file [i.e. Image] to IPFS
   async function handleUploadImage(event) {
     const data = event.target.files[0];
@@ -52,28 +51,28 @@ const Create = () => {
       });
       file = await file.saveIPFS();
       // console.log(file.ipfs())
-      // mintItem(file.ipfs());
-      createSale(file.ipfs());
+      mintItem(file.ipfs());
+      // createSale(file.ipfs());
     } catch (error) {
       console.log("Error in Uplading Token MetaData to IPFS:", error);
     }
   }
 
   // //  1.Mint item
-  // const mintItem = async(url) =>{
-  //   console.log("Minting...")
-  //   const web3Modal = new Web3Modal()
-  //   const connection = await web3Modal.connect()
-  //   const provider = new ethers.providers.Web3Provider(connection)
-  //   const signer = provider.getSigner()
+  // const mintItem = async (url) => {
+  //   console.log("Minting...");
+  //   const web3Modal = new Web3Modal();
+  //   const connection = await web3Modal.connect();
+  //   const provider = new ethers.providers.Web3Provider(connection);
+  //   const signer = provider.getSigner();
   //   // NFT Contract
-  //   let contract = new ethers.Contract(NFTAddress, NFT.abi, signer)
+  //   let contract = new ethers.Contract(NFTAddress, NFT.abi, signer);
   //   // Creating a new Token[i.e. NFT]
-  //   let transaction = await contract.createToken(url) // createToken is Function from NFT - Contract
-  //   let tx = await transaction.wait() // wait for transaction to complete...
-  //   console.log("Output:",tx);
-  //   router.push('/')
-  // }
+  //   let transaction = await contract.createToken(url); // createToken is Function from NFT - Contract
+  //   let tx = await transaction.wait(); // wait for transaction to complete...
+  //   console.log("Output:", tx);
+  //   router.push("/");
+  // };
 
   // Mint Item and List them for sale
   async function createSale(url) {

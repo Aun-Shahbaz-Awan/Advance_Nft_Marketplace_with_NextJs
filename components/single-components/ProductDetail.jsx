@@ -5,7 +5,7 @@ import Link from "next/link";
 import axios from "axios";
 // Blockcain
 import { ethers } from "ethers";
-import Web3Modal from "web3Modal";
+import Web3Modal from "web3modal";
 // React-Icons
 import { IoMdArrowDropdown } from "react-icons/io";
 import { FcAbout } from "react-icons/fc";
@@ -420,21 +420,21 @@ const ProductDetail = () => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center text-sm text-indigo-700">
-                          {transaction.transaction.from_account.address
+                          {transaction?.transaction?.from_account?.address
                             .slice(2, 8)
                             .toUpperCase()}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center text-sm text-indigo-700">
-                          {transaction.transaction.to_account.address
+                          {transaction?.transaction?.to_account?.address
                             .slice(2, 8)
                             .toUpperCase()}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-indigo-100 text-indigo-800">
-                          {transaction.created_date.slice(0, 10)}
+                          {transaction?.created_date.slice(0, 10)}
                         </span>
                       </td>
                     </tr>
