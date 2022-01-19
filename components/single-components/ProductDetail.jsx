@@ -5,7 +5,7 @@ import Link from "next/link";
 import axios from "axios";
 // Blockcain
 import { ethers } from "ethers";
-import Web3Modal from "web3modal";
+// import Web3Modal from "web3modal";
 // React-Icons
 import { IoMdArrowDropdown } from "react-icons/io";
 import { FcAbout } from "react-icons/fc";
@@ -39,9 +39,9 @@ const ProductDetail = () => {
   const [offerSec, openOfferSec] = useState(false);
   // Get Signer(wallet i.e. user) Address
   const getSigner = async () => {
-    const web3Modal = new Web3Modal();
-    const connection = await web3Modal.connect();
-    const provider = new ethers.providers.Web3Provider(connection);
+    // const web3Modal = new Web3Modal();
+    // const connection = await web3Modal.connect();
+    const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
     const signer = provider.getSigner();
     await signer.getAddress().then((data) => {
       setWalletAddress(data);
@@ -51,9 +51,9 @@ const ProductDetail = () => {
   // Handle Buying NFTs
   const handleBuyNft = async () => {
     console.log("price:", price);
-    const web3Modal = new Web3Modal();
-    const connection = await web3Modal.connect();
-    const provider = new ethers.providers.Web3Provider(connection);
+    // const web3Modal = new Web3Modal();
+    // const connection = await web3Modal.connect();
+    const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
     const signer = provider.getSigner();
     const contract = new ethers.Contract(MarketAddress, Market.abi, signer);
 

@@ -10,7 +10,7 @@ import { RiArrowUpSFill } from "react-icons/ri";
 import { MdArrowBackIos } from "react-icons/md";
 // Blockchian
 import { ethers } from "ethers";
-import Web3Modal from "web3modal";
+// import Web3Modal from "web3modal";
 import { MarketAddress } from "../../config";
 // Contract ABI
 import Market from "../../artifacts/contracts/NFTMarket.sol/NFTMarket.json";
@@ -28,9 +28,9 @@ const ProductSell = () => {
   const handleLisingItem = async (event) => {
     console.log("Trigger Handle Listing...");
     event.preventDefault();
-    const web3Modal = new Web3Modal();
-    const connection = await web3Modal.connect();
-    const provider = new ethers.providers.Web3Provider(connection);
+    // const web3Modal = new Web3Modal();
+    // const connection = await web3Modal.connect();
+    const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
     const signer = provider.getSigner();
     console.log("Signer:", signer);
     const MKPContract = new ethers.Contract(MarketAddress, Market.abi, signer); // contract -> Marketplace Contract

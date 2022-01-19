@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Web3Modal from "web3modal";
+// import Web3Modal from "web3modal";
 
 // Contracts Address
 import { NFTAddress, MarketAddress } from "../../config";
@@ -23,12 +23,12 @@ export default function CreatorDashboard() {
   }, [nfts.length, sold.length]);
 
   const loadNFTs = async () => {
-    const web3Modal = new Web3Modal({
-      // network: "mainnet",
-      // cacheProvider: true,
-    });
-    const connection = await web3Modal.connect();
-    const provider = new ethers.providers.Web3Provider(connection);
+    // const web3Modal = new Web3Modal({
+    //   // network: "mainnet",
+    //   // cacheProvider: true,
+    // });
+    // const connection = await web3Modal.connect();
+    const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
     const signer = provider.getSigner();
 
     const marketContract = new ethers.Contract(

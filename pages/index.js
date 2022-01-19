@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import axios from "axios";
-import Web3Modal from "web3modal";
+// import Web3Modal from "web3modal";
 
 import NFT from "./../artifacts/contracts/NFT.sol/NFT.json";
 import Market from "./../artifacts/contracts/NFTMarket.sol/NFTMarket.json";
@@ -66,9 +66,9 @@ export default function Home() {
 
   // Handle Buying NFTs
   const handleBuyNft = async (nft) => {
-    const web3Modal = new Web3Modal();
-    const connection = await web3Modal.connect();
-    const provider = new ethers.providers.Web3Provider(connection);
+    // const web3Modal = new Web3Modal();
+    // const connection = await web3Modal.connect();
+    const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
     const signer = provider.getSigner();
     const contract = new ethers.Contract(MarketAddress, Market.abi, signer);
     // const contract = new ethers.Contract(NFTAddress, NFT.abi, signer)

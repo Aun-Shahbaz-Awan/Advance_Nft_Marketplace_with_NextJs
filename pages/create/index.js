@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import router from "next/router";
 import Image from "next/dist/client/image";
 import { ethers } from "ethers";
-import Web3Modal from "web3modal";
+// import Web3Modal from "web3modal";
 // Addresses
 import { NFTAddress, MarketAddress } from "../../config";
 // ABI's
@@ -77,9 +77,9 @@ const Create = () => {
   // Mint Item and List them for sale
   async function createSale(url) {
     setMinting(true);
-    const web3Modal = new Web3Modal();
-    const connection = await web3Modal.connect();
-    const provider = new ethers.providers.Web3Provider(connection);
+    // const web3Modal = new Web3Modal();
+    // const connection = await web3Modal.connect();
+    const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
     const signer = provider.getSigner();
     // NFT Contract
     let contract = new ethers.Contract(NFTAddress, NFT.abi, signer);
