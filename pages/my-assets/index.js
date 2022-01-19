@@ -3,7 +3,7 @@ import { ethers } from "ethers";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 // import Web3Modal from "web3modal";
-
+import detectEthereumProvider from "@metamask/detect-provider";
 import { NFTAddress, MarketAddress } from "../../config";
 
 import Market from "./../../artifacts/contracts/NFTMarket.sol/NFTMarket.json";
@@ -25,8 +25,15 @@ export default function MyAssets() {
     //   // cacheProvider: true,
     // });
     // const connection = await web3Modal.connect();
-    const provider = new ethers.providers.Web3Provider(connection);
+    // const provider = new ethers.providers.Web3Provider(connection);
+    // const provider = await detectEthereumProvider();
+    // const signer = provider.getSigner();
+
+    const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
     const signer = provider.getSigner();
+    // const connection = window.ethereum ? window.ethereum : "";
+    // const provider = new ethers.providers.Web3Provider(connection);
+    // const signer = provider.getSigner();
     const user = await signer.getAddress().then((result) => {
       return result;
     });

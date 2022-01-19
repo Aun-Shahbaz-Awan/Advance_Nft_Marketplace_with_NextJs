@@ -11,6 +11,7 @@ import { MdArrowBackIos } from "react-icons/md";
 // Blockchian
 import { ethers } from "ethers";
 // import Web3Modal from "web3modal";
+import detectEthereumProvider from "@metamask/detect-provider";
 import { MarketAddress } from "../../config";
 // Contract ABI
 import Market from "../../artifacts/contracts/NFTMarket.sol/NFTMarket.json";
@@ -30,8 +31,13 @@ const ProductSell = () => {
     event.preventDefault();
     // const web3Modal = new Web3Modal();
     // const connection = await web3Modal.connect();
+    // const provider = new ethers.providers.JsonRpcProvider(
+    //   `https://rinkeby.infura.io/v3/${process.env.RPC_Provider_Id}`
+    // );
+    // console.log(provider);
     const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
     const signer = provider.getSigner();
+    // const signer = provider.getSigner();
     console.log("Signer:", signer);
     const MKPContract = new ethers.Contract(MarketAddress, Market.abi, signer); // contract -> Marketplace Contract
     console.log("MKP Contract:", MKPContract);

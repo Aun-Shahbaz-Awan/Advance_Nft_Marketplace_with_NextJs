@@ -3,6 +3,7 @@ import router from "next/router";
 import Image from "next/dist/client/image";
 import { ethers } from "ethers";
 // import Web3Modal from "web3modal";
+import detectEthereumProvider from "@metamask/detect-provider";
 // Addresses
 import { NFTAddress, MarketAddress } from "../../config";
 // ABI's
@@ -79,6 +80,7 @@ const Create = () => {
     setMinting(true);
     // const web3Modal = new Web3Modal();
     // const connection = await web3Modal.connect();
+
     const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
     const signer = provider.getSigner();
     // NFT Contract
@@ -109,6 +111,11 @@ const Create = () => {
   // useEffect called on page load...
   useEffect(() => {
     authenticate();
+        // const provider = new ethers.providers.Web3Provider(
+        //   window.ethereum,
+        //   "any"
+        // );
+        // const signer = provider.getSigner();
   }, [authenticate]);
 
   return (

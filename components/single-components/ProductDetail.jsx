@@ -6,6 +6,7 @@ import axios from "axios";
 // Blockcain
 import { ethers } from "ethers";
 // import Web3Modal from "web3modal";
+import detectEthereumProvider from "@metamask/detect-provider";
 // React-Icons
 import { IoMdArrowDropdown } from "react-icons/io";
 import { FcAbout } from "react-icons/fc";
@@ -41,7 +42,10 @@ const ProductDetail = () => {
   const getSigner = async () => {
     // const web3Modal = new Web3Modal();
     // const connection = await web3Modal.connect();
-    const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+    // const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+    // const signer = provider.getSigner();
+    const connection = window.ethereum ? window.ethereum : "";
+    const provider = new ethers.providers.Web3Provider(connection);
     const signer = provider.getSigner();
     await signer.getAddress().then((data) => {
       setWalletAddress(data);
@@ -53,8 +57,10 @@ const ProductDetail = () => {
     console.log("price:", price);
     // const web3Modal = new Web3Modal();
     // const connection = await web3Modal.connect();
+    // const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
     const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
     const signer = provider.getSigner();
+
     const contract = new ethers.Contract(MarketAddress, Market.abi, signer);
 
     /* user will be prompted to pay the asking proces to complete the transaction */

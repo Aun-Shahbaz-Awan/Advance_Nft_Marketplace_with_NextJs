@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import axios from "axios";
 // import Web3Modal from "web3modal";
+import detectEthereumProvider from "@metamask/detect-provider";
 
 import NFT from "./../artifacts/contracts/NFT.sol/NFT.json";
 import Market from "./../artifacts/contracts/NFTMarket.sol/NFTMarket.json";
@@ -68,6 +69,7 @@ export default function Home() {
   const handleBuyNft = async (nft) => {
     // const web3Modal = new Web3Modal();
     // const connection = await web3Modal.connect();
+    // const provider = await detectEthereumProvider();
     const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
     const signer = provider.getSigner();
     const contract = new ethers.Contract(MarketAddress, Market.abi, signer);

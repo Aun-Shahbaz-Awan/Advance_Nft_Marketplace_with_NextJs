@@ -4,19 +4,45 @@ import Header from "../components/single-components/Header";
 import "../styles/globals.css";
 import { MoralisProvider } from "react-moralis";
 
-function MyApp({ Component, pageProps }) {
+
+
+function SafeHydrate({ children }) {
   return (
-    <MoralisProvider
-      appId="Y3Yod9lWu77Xw8y9STtAViGveXbIQphhR6t420Cu"
-      serverUrl="https://zete9krq17np.usemoralis.com:2053/server"
-    >
-      <React.Fragment>
-        <Header />
-        <Component {...pageProps} />
-        <Footer />
-      </React.Fragment>
-    </MoralisProvider>
+    <div suppressHydrationWarning>
+      {typeof window === "undefined" ? null : children}
+    </div>
   );
 }
+
+function MyApp({ Component, pageProps }) {
+  return (
+    <SafeHydrate>
+      <MoralisProvider
+        appId="Y3Yod9lWu77Xw8y9STtAViGveXbIQphhR6t420Cu"
+        serverUrl="https://zete9krq17np.usemoralis.com:2053/server"
+      >
+        <React.Fragment>
+          <Header />
+          <Component {...pageProps} />
+          <Footer />
+        </React.Fragment>
+      </MoralisProvider>
+    </SafeHydrate>
+  );
+}
+// function MyApp({ Component, pageProps }) {
+//   return (
+//     <MoralisProvider
+//       appId="Y3Yod9lWu77Xw8y9STtAViGveXbIQphhR6t420Cu"
+//       serverUrl="https://zete9krq17np.usemoralis.com:2053/server"
+//     >
+//       <React.Fragment>
+//         <Header />
+//         <Component {...pageProps} />
+//         <Footer />
+//       </React.Fragment>
+//     </MoralisProvider>
+//   );
+// }
 
 export default MyApp;
