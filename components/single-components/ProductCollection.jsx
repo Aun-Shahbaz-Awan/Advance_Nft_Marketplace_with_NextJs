@@ -11,8 +11,6 @@ const ProductCollection = () => {
   const [stats, setStats] = useState("");
   const [nfts, setNfts] = useState([]);
   const [loaded, setLoaded] = useState(false);
-  console.log("Slug:", slug);
-
   useEffect(() => {
     if (!slug) {
       return;

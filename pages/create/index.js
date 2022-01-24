@@ -52,8 +52,8 @@ const Create = () => {
       });
       file = await file.saveIPFS();
       // console.log(file.ipfs())
-      mintItem(file.ipfs());
-      // createSale(file.ipfs());
+      // mintItem(file.ipfs());
+      createSale(file.ipfs());
     } catch (error) {
       console.log("Error in Uplading Token MetaData to IPFS:", error);
     }

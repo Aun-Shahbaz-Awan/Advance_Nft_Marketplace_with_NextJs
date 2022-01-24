@@ -119,7 +119,12 @@ export default function Home() {
           <div className="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
             {dataLoaded
               ? NFTs?.map((nft, key) => (
-                  <Product product={nft} key={key} onBuy={handleBuyNft} />
+                  <Product
+                    product={nft}
+                    key={key}
+                    onBuy={handleBuyNft}
+                    showBuyButton={true}
+                  />
                 ))
               : [...Array(4)].map((e, key) => <ProductLoadAnim key={key} />)}
           </div>

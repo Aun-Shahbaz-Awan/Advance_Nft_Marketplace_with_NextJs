@@ -4,8 +4,6 @@ import Header from "../components/single-components/Header";
 import "../styles/globals.css";
 import { MoralisProvider } from "react-moralis";
 
-
-
 function SafeHydrate({ children }) {
   return (
     <div suppressHydrationWarning>

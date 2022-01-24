@@ -10,7 +10,7 @@ import { RiArrowUpSFill } from "react-icons/ri";
 import { MdArrowBackIos } from "react-icons/md";
 // Blockchian
 import { ethers } from "ethers";
-// import Web3Modal from "web3modal";
+import Web3Modal from "web3modal";
 import { MarketAddress } from "../../config";
 // Contract ABI
 import Market from "../../artifacts/contracts/NFTMarket.sol/NFTMarket.json";
@@ -45,9 +45,6 @@ const ProductSell = () => {
     event.preventDefault();
   };
   useEffect(() => {
-    if (!contract && !id) {
-      return;
-    }
     if (!signer) {
       (async () => {
         const web3Modal = new Web3Modal();
@@ -57,6 +54,9 @@ const ProductSell = () => {
       })().catch((err) => {
         console.error(err);
       });
+    }
+    if (!contract && !id) {
+      return;
     }
     const fetchDetails = async () => {
       const options = {

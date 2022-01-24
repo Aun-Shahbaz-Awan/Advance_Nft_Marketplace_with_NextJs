@@ -1,12 +1,11 @@
 import { ethers } from "ethers";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import dynamic from "next/dynamic";
 import Web3Modal from "web3modal";
-// Contracts Address
-import { NFTAddress, MarketAddress } from "../../config";
-// Contarcts ABI's
-import Market from "./../../artifacts/contracts/NFTMarket.sol/NFTMarket.json";
-import NFT from "./../../artifacts/contracts/NFT.sol/NFT.json";
+import { NFTAddress, MarketAddress } from "../../config"; // Contracts Address
+import Market from "./../../artifacts/contracts/NFTMarket.sol/NFTMarket.json"; // Market Contarct's ABI
+import NFT from "./../../artifacts/contracts/NFT.sol/NFT.json"; // NFT Contarct's ABI
 // Component
 import Product from "../../components/single-components/Product";
 import ProductLoadAnim from "../../components/single-components/ProductLoadAnim";
@@ -16,9 +15,16 @@ export default function CreatorDashboard() {
   const [nfts, setNfts] = useState([]);
   const [sold, setSold] = useState([]);
   const [loaded, setLoaded] = useState(false);
-  const [signer, setSigner] = useState("");
+  // const [signer, setSigner] = useState("");
+  // const [provider, setProvider] = useState("");
+  // console.log("Signer:", signer, "Provider:", provider);
   // Function
   const loadNFTs = async () => {
+    const web3Modal = new Web3Modal();
+    const connection = await web3Modal.connect();
+    const provider = new ethers.providers.Web3Provider(connection);
+    const signer = provider.getSigner();
+
     const marketContract = new ethers.Contract(
       MarketAddress,
       Market.abi,
@@ -72,17 +78,18 @@ export default function CreatorDashboard() {
   };
   // useEffect Hook
   useEffect(() => {
-    if (signer) return;
-    else {
-      (async () => {
-        const web3Modal = new Web3Modal();
-        const connection = await web3Modal.connect();
-        const provider = new ethers.providers.Web3Provider(connection);
-        setSigner(provider.getSigner());
-      })().catch((err) => {
-        console.error(err);
-      });
-    }
+    // if (signer) return;
+    // else {
+    //   (async () => {
+    //     const web3Modal = new Web3Modal();
+    //     const connection = await web3Modal.connect();
+    //     const provider = new ethers.providers.Web3Provider(connection);
+    //     setProvider(provider);
+    //     setSigner(provider.getSigner());
+    //   })().catch((err) => {
+    //     console.error(err);
+    //   });
+    // }
     loadNFTs();
   }, [nfts.length, sold.length]);
   if (loaded && !nfts.length)
@@ -98,7 +105,9 @@ export default function CreatorDashboard() {
           {/* Products */}
           <div className="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
             {loaded
-              ? nfts?.map((nft, key) => <Product product={nft} key={key} />)
+              ? nfts?.map((nft, key) => (
+                  <Product product={nft} key={key} showBuyButton={false} />
+                ))
               : [...Array(4)].map((e, key) => <ProductLoadAnim key={key} />)}
           </div>
         </div>
@@ -114,7 +123,7 @@ export default function CreatorDashboard() {
             {/* Products */}
             <div className="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
               {sold?.map((nft, key) => (
-                <Product product={nft} key={key} />
+                <Product product={nft} key={key} showBuyButton={false} />
               ))}
             </div>
           </div>

@@ -13,13 +13,18 @@ export default function MyAssets() {
   // useState Hook
   const [nfts, setNfts] = useState([]);
   const [loaded, setLoaded] = useState(false);
-  const [signer, setSigner] = useState("");
+  // const [signer, setSigner] = useState("");
+
   // Functions
   // Fetch my Tokens
   async function loadNFTs() {
-    const user = await signer.getAddress().then((result) => {
-      return result;
-    });
+    // const user = await signer.getAddress().then((result) => {
+    //   return result;
+    // });
+    const web3Modal = new Web3Modal();
+    const connection = await web3Modal.connect();
+    const provider = new ethers.providers.Web3Provider(connection);
+    const signer = provider.getSigner();
 
     const marketContract = new ethers.Contract(
       MarketAddress,
@@ -68,17 +73,18 @@ export default function MyAssets() {
   }
   // useEffect Hook
   useEffect(() => {
+    // if (signer) return;
+    // else {
+    //   (async () => {
+    //     const web3Modal = new Web3Modal();
+    //     const connection = await web3Modal.connect();
+    //     const provider = new ethers.providers.Web3Provider(connection);
+    //     setSigner(provider.getSigner());
+    //   })().catch((err) => {
+    //     console.error(err);
+    //   });
+    // }
     loadNFTs();
-    if (!signer) {
-      (async () => {
-        const web3Modal = new Web3Modal();
-        const connection = await web3Modal.connect();
-        const provider = new ethers.providers.Web3Provider(connection);
-        setSigner(provider.getSigner());
-      })().catch((err) => {
-        console.error(err);
-      });
-    }
   }, []);
   if (loaded && !nfts.length)
     return <h1 className="py-10 px-20 text-3xl">No assets owned</h1>;
@@ -93,7 +99,9 @@ export default function MyAssets() {
           {/* Products */}
           <div className="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
             {loaded
-              ? nfts?.map((nft, key) => <Product product={nft} key={key} />)
+              ? nfts?.map((nft, key) => (
+                  <Product product={nft} key={key} showBuyButton={false} />
+                ))
               : [...Array(4)].map((e, key) => <ProductLoadAnim key={key} />)}
           </div>
         </div>

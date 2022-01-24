@@ -4,7 +4,7 @@ import React from "react";
 import { AiFillTag } from "react-icons/ai";
 import { NFTAddress } from "../../config";
 
-const Product = ({ product, onBuy }) => {
+const Product = ({ product, onBuy, showBuyButton }) => {
   if (product.description) {
     let description = product.description;
     let count = 55;
@@ -59,15 +59,17 @@ const Product = ({ product, onBuy }) => {
           </p>
         </div>
 
-        <div
-          className="flex justify-between p-4"
-          onClick={() => onBuy(product)}
-        >
-          <button className="inline-flex justify-center py-2 px-4 w-full border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-            <AiFillTag className="mt-auto mb-auto" /> &nbsp; Buy {product.price}{" "}
-            ETH
-          </button>
-        </div>
+        {showBuyButton && (
+          <div
+            className="flex justify-between p-4"
+            onClick={() => onBuy(product)}
+          >
+            <button className="inline-flex justify-center py-2 px-4 w-full border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+              <AiFillTag className="mt-auto mb-auto" /> &nbsp; Buy{" "}
+              {product.price} ETH
+            </button>
+          </div>
+        )}
       </div>
     </React.Fragment>
   );
