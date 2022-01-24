@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/dist/client/router";
-import Image from "next/image";
+// import Image from "next/image";
 import Link from "next/link";
 import axios from "axios";
 // Blockcain
 import { ethers } from "ethers";
-// import Web3Modal from "web3modal";
-import detectEthereumProvider from "@metamask/detect-provider";
+import Web3Modal from "web3modal";
 // React-Icons
 import { IoMdArrowDropdown } from "react-icons/io";
 import { FcAbout } from "react-icons/fc";
@@ -31,6 +30,7 @@ const ProductDetail = () => {
   const [walletAddress, setWalletAddress] = useState("");
   const [tokenOwner, setTokenOwner] = useState("");
   const [transactions, setTransactions] = useState("");
+  const [signer, setSigner] = useState("");
   // Dropdown for Sections
   const [descriptionSec, openDescriptionSec] = useState(true);
   const [aboutSec, openAboutSec] = useState(false);
@@ -38,33 +38,12 @@ const ProductDetail = () => {
   const [historySec, openHistorySec] = useState(true);
   const [listingSec, openListingSec] = useState(false);
   const [offerSec, openOfferSec] = useState(false);
-  // Get Signer(wallet i.e. user) Address
-  const getSigner = async () => {
-    // const web3Modal = new Web3Modal();
-    // const connection = await web3Modal.connect();
-    // const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-    // const signer = provider.getSigner();
-    const connection = window.ethereum ? window.ethereum : "";
-    const provider = new ethers.providers.Web3Provider(connection);
-    const signer = provider.getSigner();
-    await signer.getAddress().then((data) => {
-      setWalletAddress(data);
-    });
-  };
-  getSigner();
+
+  console.log("signer:", signer);
   // Handle Buying NFTs
   const handleBuyNft = async () => {
-    console.log("price:", price);
-    // const web3Modal = new Web3Modal();
-    // const connection = await web3Modal.connect();
-    // const provider = new ethers.providers.Web3Provider(connection);
-    const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-    const signer = provider.getSigner();
-
     const contract = new ethers.Contract(MarketAddress, Market.abi, signer);
-
     /* user will be prompted to pay the asking proces to complete the transaction */
-
     // const price;
     // setTimeout(price = ethers.utils.parseUnits(price.toString(), 'ether'), 3000);
     // const price = ethers.utils.parseUnits(price.toString(), 'ether')
@@ -77,6 +56,20 @@ const ProductDetail = () => {
   };
   // Create Sale Item on marketplace...
   useEffect(() => {
+    if (!signer) {
+      (async () => {
+        const web3Modal = new Web3Modal();
+        const connection = await web3Modal.connect();
+        const provider = new ethers.providers.Web3Provider(connection);
+        setSigner(provider.getSigner());
+      })().catch((err) => {
+        console.error(err);
+      });
+    }
+    // Get Wallet Address
+    signer.getAddress().then((data) => {
+      setWalletAddress(data);
+    });
     if (!contract && !id) {
       return;
     }
@@ -118,18 +111,10 @@ const ProductDetail = () => {
         .catch((error) => {
           console.log(error);
         });
-      // const responce = await axios.request(options)
-      // const transactionDetails = await Promise.all(
-      //     response.data.asset_events.map( async dataItem => {
-      //         return dataItem.transaction
-      //     })
-      // )
-      // setTransactions(transactionDetails)
     };
     fetchDetails();
   }, [contract, id]);
 
-  // console.log('Owner:', token.owner?.address, "wallet:", walletAddress)
   return (
     <React.Fragment>
       <div className="md:flex items-start justify-center py-12 2xl:px-30 md:px-20 px-4">

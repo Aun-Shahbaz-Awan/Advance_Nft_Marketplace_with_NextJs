@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/dist/client/router";
-import Image from "next/image";
+// import Image from "next/image";
 import axios from "axios";
 // React-Icons
 import { IoMdArrowDropdown } from "react-icons/io";
@@ -11,7 +11,6 @@ import { MdArrowBackIos } from "react-icons/md";
 // Blockchian
 import { ethers } from "ethers";
 // import Web3Modal from "web3modal";
-import detectEthereumProvider from "@metamask/detect-provider";
 import { MarketAddress } from "../../config";
 // Contract ABI
 import Market from "../../artifacts/contracts/NFTMarket.sol/NFTMarket.json";
@@ -21,37 +20,18 @@ const ProductSell = () => {
   const { contract, id } = router.query;
   // Dropdown for Sections
   const [detailSec, openDetailSec] = useState(true);
-
   // useState
   const [token, setToken] = useState("");
   const [price, setPrice] = useState("");
+  const [signer, setSigner] = useState("");
   // Create Market Item on marketplace...
   const handleLisingItem = async (event) => {
     console.log("Trigger Handle Listing...");
-    event.preventDefault();
-    // const web3Modal = new Web3Modal();
-    // const connection = await web3Modal.connect();
-    // const provider = new ethers.providers.Web3Provider(connection);
-    const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
     const signer = provider.getSigner();
-    // const signer = provider.getSigner();
-    console.log("Signer:", signer);
     const MKPContract = new ethers.Contract(MarketAddress, Market.abi, signer); // contract -> Marketplace Contract
-    console.log("MKP Contract:", MKPContract);
     let listingPrice = await MKPContract.getListingPrice(); // getListingPrice is Function from NFTMarket - Contract
     listingPrice = listingPrice.toString();
     const sellPrice = ethers.utils.parseUnits(price, "ether");
-
-    console.log(
-      "Contract:",
-      contract,
-      "TokenID:",
-      id,
-      "Sell Price:",
-      sellPrice,
-      "Listing Price:",
-      listingPrice
-    );
     // Listing Item for sale on MarketPlace -------------------
     let transaction = await MKPContract.createMarketItem(
       contract,
@@ -60,12 +40,23 @@ const ProductSell = () => {
       { value: listingPrice }
     );
     const tx = await transaction.wait(); // wait for transaction to complete...
-    console.log("Transection:", tx);
+    // console.log("Transection:", tx);
     router.push("/");
+    event.preventDefault();
   };
   useEffect(() => {
     if (!contract && !id) {
       return;
+    }
+    if (!signer) {
+      (async () => {
+        const web3Modal = new Web3Modal();
+        const connection = await web3Modal.connect();
+        const provider = new ethers.providers.Web3Provider(connection);
+        setSigner(provider.getSigner());
+      })().catch((err) => {
+        console.error(err);
+      });
     }
     const fetchDetails = async () => {
       const options = {

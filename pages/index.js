@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import axios from "axios";
-// import Web3Modal from "web3modal";
-import detectEthereumProvider from "@metamask/detect-provider";
-
+import Web3Modal from "web3modal";
 import NFT from "./../artifacts/contracts/NFT.sol/NFT.json";
 import Market from "./../artifacts/contracts/NFTMarket.sol/NFTMarket.json";
 import { NFTAddress, MarketAddress } from "../config";
@@ -14,31 +12,25 @@ import ProductLoadAnim from "../components/single-components/ProductLoadAnim";
 export default function Home() {
   const [alert, setAlert] = useState({ isAlert: false, type: "", message: "" });
   const [NFTs, setNFTs] = useState([]);
+  const [signer, setSigner] = useState("");
   const [dataLoaded, setDataLoaded] = useState(false);
-  useEffect(() => {
-    handleLoadNFTs();
-  }, []);
+
   // Handle Fetching NFTs
   async function handleLoadNFTs() {
     const provider = new ethers.providers.JsonRpcProvider(
       `https://rinkeby.infura.io/v3/${process.env.RPC_Provider_Id}`
     );
-
     const tokenContract = new ethers.Contract(NFTAddress, NFT.abi, provider);
-    // console.log("Token Contract:", tokenContract)
     const marketContract = new ethers.Contract(
       MarketAddress,
       Market.abi,
       provider
     );
-    // console.log("Marketplace Contract:", marketContract)
     const data = await marketContract.fetchMarketItems();
-    // console.log("Incoming MKP Items:",data)
     // Getting Market Items
     const items = await Promise.all(
       data.map(async (dataItem) => {
         const tokenURI = await tokenContract.tokenURI(dataItem.tokenId); // i.e. something like http:\\.....
-        // console.log("token id:", dataItem.tokenId)
         const meta = await axios.get(tokenURI); // Getting Token[NFT] info
         let price = ethers.utils.formatUnits(
           dataItem.price.toString(),
@@ -60,39 +52,47 @@ export default function Home() {
     ).catch((e) => {
       console.log(e);
     });
-    // console.log("Market Items:", NFTs)
     setNFTs(items);
     setDataLoaded(true);
   }
-
   // Handle Buying NFTs
   const handleBuyNft = async (nft) => {
     // const web3Modal = new Web3Modal();
     // const connection = await web3Modal.connect();
     // const provider = new ethers.providers.Web3Provider(connection);
-    const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-    const signer = provider.getSigner();
+
+    // const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+    // const signer = provider.getSigner();
     const contract = new ethers.Contract(MarketAddress, Market.abi, signer);
-    // const contract = new ethers.Contract(NFTAddress, NFT.abi, signer)
-
-    /* user will be prompted to pay the asking proces to complete the transaction */
     const price = ethers.utils.parseUnits(nft.price.toString(), "ether");
-    console.log("Address:", NFTAddress, "ItemId:", nft.itemId, "Price:", price);
-    // try {
-    const transaction = await contract.createMarketSale(
-      NFTAddress,
-      nft.itemId,
-      { value: price }
-    );
-    await transaction.wait();
-    // } catch (error) {
-    //   // setAlert({isAlert: true, type:"error", message:{error}})
-    //   // setTimeout( function(){ setAlert({ isAlert:false, type:"", message:""}) }  , 5000);
-    //   console.log(error);
-    // }
-
+    try {
+      const transaction = await contract.createMarketSale(
+        NFTAddress,
+        nft.itemId,
+        { value: price }
+      );
+      await transaction.wait();
+    } catch (error) {
+      console.log(error);
+    }
     handleLoadNFTs();
   };
+  // useEffect Hook
+  console.log("Signer Home:", signer);
+  useEffect(() => {
+    handleLoadNFTs();
+    if (signer) return;
+    else {
+      (async () => {
+        const web3Modal = new Web3Modal();
+        const connection = await web3Modal.connect();
+        const provider = new ethers.providers.Web3Provider(connection);
+        setSigner(provider.getSigner());
+      })().catch((err) => {
+        console.error(err);
+      });
+    }
+  }, []);
   if (dataLoaded && !NFTs?.length)
     return (
       <React.Fragment>

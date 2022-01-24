@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import router from "next/router";
 import Image from "next/dist/client/image";
 import { ethers } from "ethers";
-// import Web3Modal from "web3modal";
-import detectEthereumProvider from "@metamask/detect-provider";
+import Web3Modal from "web3modal";
 // Addresses
 import { NFTAddress, MarketAddress } from "../../config";
 // ABI's
@@ -20,6 +19,7 @@ const Create = () => {
     description: "",
   });
   const [minting, setMinting] = useState(false);
+  const [signer, setSigner] = useState("");
   // Moralis
   const { authenticate, user, Moralis } = useMoralis();
   // Upload file [i.e. Image] to IPFS
@@ -78,13 +78,7 @@ const Create = () => {
   // Mint Item and List them for sale
   async function createSale(url) {
     setMinting(true);
-    // const web3Modal = new Web3Modal();
-    // const connection = await web3Modal.connect();
-
-    const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-    const signer = provider.getSigner();
-    // NFT Contract
-    let contract = new ethers.Contract(NFTAddress, NFT.abi, signer);
+    let contract = new ethers.Contract(NFTAddress, NFT.abi, signer); // NFT Contract
     // Creating a new Token[i.e. NFT]
     let transaction = await contract.createToken(url); // createToken is Function from NFT - Contract
     let tx = await transaction.wait(); // wait for transaction to complete...
@@ -111,11 +105,17 @@ const Create = () => {
   // useEffect called on page load...
   useEffect(() => {
     authenticate();
-        // const provider = new ethers.providers.Web3Provider(
-        //   window.ethereum,
-        //   "any"
-        // );
-        // const signer = provider.getSigner();
+    if (signer) return;
+    else {
+      (async () => {
+        const web3Modal = new Web3Modal();
+        const connection = await web3Modal.connect();
+        const provider = new ethers.providers.Web3Provider(connection);
+        setSigner(provider.getSigner());
+      })().catch((err) => {
+        console.error(err);
+      });
+    }
   }, [authenticate]);
 
   return (

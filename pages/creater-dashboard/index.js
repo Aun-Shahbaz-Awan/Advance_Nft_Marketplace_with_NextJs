@@ -1,8 +1,7 @@
 import { ethers } from "ethers";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-// import Web3Modal from "web3modal";
-import detectEthereumProvider from "@metamask/detect-provider";
+import Web3Modal from "web3modal";
 // Contracts Address
 import { NFTAddress, MarketAddress } from "../../config";
 // Contarcts ABI's
@@ -13,23 +12,13 @@ import Product from "../../components/single-components/Product";
 import ProductLoadAnim from "../../components/single-components/ProductLoadAnim";
 
 export default function CreatorDashboard() {
+  // useState Hook
   const [nfts, setNfts] = useState([]);
   const [sold, setSold] = useState([]);
   const [loaded, setLoaded] = useState(false);
-
-  useEffect(() => {
-    loadNFTs();
-    console.log("Useffect");
-  }, [nfts.length, sold.length]);
-
+  const [signer, setSigner] = useState("");
+  // Function
   const loadNFTs = async () => {
-    // const web3Modal = new Web3Modal({
-    //   // network: "mainnet",
-    //   // cacheProvider: true,
-    // });
-    // const provider = new ethers.providers.Web3Provider(connection);
-    const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-    const signer = provider.getSigner();
     const marketContract = new ethers.Contract(
       MarketAddress,
       Market.abi,
@@ -81,6 +70,21 @@ export default function CreatorDashboard() {
     setSold(filteredSoldItem);
     setLoaded(true);
   };
+  // useEffect Hook
+  useEffect(() => {
+    if (signer) return;
+    else {
+      (async () => {
+        const web3Modal = new Web3Modal();
+        const connection = await web3Modal.connect();
+        const provider = new ethers.providers.Web3Provider(connection);
+        setSigner(provider.getSigner());
+      })().catch((err) => {
+        console.error(err);
+      });
+    }
+    loadNFTs();
+  }, [nfts.length, sold.length]);
   if (loaded && !nfts.length)
     return <h1 className="py-10 px-20 text-3xl">No assets created</h1>;
   return (

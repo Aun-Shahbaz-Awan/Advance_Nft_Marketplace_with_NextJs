@@ -2,30 +2,21 @@
 import { ethers } from "ethers";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-// import Web3Modal from "web3modal";
-import detectEthereumProvider from "@metamask/detect-provider";
+import Web3Modal from "web3modal";
 import { NFTAddress, MarketAddress } from "../../config";
-
 import Market from "./../../artifacts/contracts/NFTMarket.sol/NFTMarket.json";
 import NFT from "./../../artifacts/contracts/NFT.sol/NFT.json";
 import Product from "../../components/single-components/Product";
 import ProductLoadAnim from "../../components/single-components/ProductLoadAnim";
 
 export default function MyAssets() {
+  // useState Hook
   const [nfts, setNfts] = useState([]);
   const [loaded, setLoaded] = useState(false);
-
-  useEffect(() => {
-    loadNFTs();
-  }, []);
+  const [signer, setSigner] = useState("");
+  // Functions
   // Fetch my Tokens
   async function loadNFTs() {
-    // const web3Modal = new Web3Modal();
-    // const connection = await web3Modal.connect();
-    // const provider = new ethers.providers.Web3Provider(connection);
-    const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-    const signer = provider.getSigner();
-    
     const user = await signer.getAddress().then((result) => {
       return result;
     });
@@ -75,6 +66,20 @@ export default function MyAssets() {
     setNfts(filteredItem);
     setLoaded(true);
   }
+  // useEffect Hook
+  useEffect(() => {
+    loadNFTs();
+    if (!signer) {
+      (async () => {
+        const web3Modal = new Web3Modal();
+        const connection = await web3Modal.connect();
+        const provider = new ethers.providers.Web3Provider(connection);
+        setSigner(provider.getSigner());
+      })().catch((err) => {
+        console.error(err);
+      });
+    }
+  }, []);
   if (loaded && !nfts.length)
     return <h1 className="py-10 px-20 text-3xl">No assets owned</h1>;
   return (
