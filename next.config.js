@@ -5,7 +5,9 @@ module.exports = {
       "tailwindui.com",
       "i.ibb.co",
       "ipfs.moralis.io",
+      "ipfs.moralis.io:2053",
       "s3.amazonaws.com",
+      "storage.opensea.io",
     ],
   },
   env: {
